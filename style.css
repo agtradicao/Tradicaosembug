@@ -194,17 +194,24 @@ footer {
 .hidden { display: none !important; }
 
 
-/* ===============================================
-   CORREÇÃO FINAL PARA INPUTS NO SAFARI (IPHONE)
-   =============================================== */
+/* =============================================================
+   CORREÇÃO FINAL E COMPLETA PARA INPUTS NO SAFARI (IPHONE)
+   - Força a Largura, Altura e Alinhamento corretos
+   ============================================================= */
 
-/* Garante que todos os inputs tenham o mesmo tamanho de caixa */
+/* 1. CORRIGE O PROBLEMA DA LARGURA ("FICAVA PEQUENO") */
 .input-field {
+    width: 100%;
     box-sizing: border-box;
 }
 
-/* Estilo específico para o placeholder do seletor de data */
+/* 2. CORRIGE O PROBLEMA DA ALTURA ("FICAVA DESPROPORCIONAL") */
+#date-picker.input-field {
+    height: 52px; /* <-- Força a altura a ser igual ao campo de serviços */
+    line-height: normal;
+}
+
+/* 3. AJUSTE FINO DO TEXTO */
 .date-picker-wrapper label {
-    /* Move o texto "Escolha uma data" um pouco para cima para alinhar melhor */
-    top: 14px; 
+    top: 15px; 
 }
