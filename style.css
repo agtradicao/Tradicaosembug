@@ -1,0 +1,210 @@
+/* =================================================
+   ARQUIVO DE ESTILO (CSS) ORIGINAL - VERSÃO ESTÁVEL E CORRIGIDA
+   ================================================= */
+
+/* --- Variáveis de Cor (Tema Barbearia Clássica) --- */
+:root {
+    --cor-fundo-app: #1a1a1a;
+    --cor-fundo-cartao: rgba(15, 15, 15, 0.85);
+    --cor-borda: #c5a47e;
+    --cor-texto-principal: #f0e6d8;
+    --cor-texto-suave: #a89a8a;
+    --cor-primaria: #b38b6d;
+    --cor-secundaria: #332e2a;
+    --cor-perigo: #a54a4a;
+    --cor-fundo-input: #1f1b18;
+    --cor-btn-desabilitado: #2f2a26;
+}
+
+/* --- Configurações Gerais com Imagem de Fundo --- */
+body {
+    font-family: 'Garamond', 'Times New Roman', serif;
+    background-color: var(--cor-fundo-app);
+    background-image: url('fundo.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    color: var(--cor-texto-principal);
+    margin: 0;
+    line-height: 1.6;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 5, 0, 0.6);
+    z-index: -1;
+}
+
+.container { max-width: 600px; margin: 0 auto; padding: 20px; }
+.hidden { display: none !important; }
+
+/* --- Cabeçalho e Logo (Página do Cliente) --- */
+header { text-align: center; padding: 20px 20px 10px; }
+.logo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 5px solid var(--cor-primaria);
+    object-fit: cover;
+    margin-bottom: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+header h1#nome-barbearia {
+    display: none; 
+}
+
+/* --- Seções e Títulos (Página do Cliente) --- */
+main section {
+    background-color: var(--cor-fundo-cartao);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid var(--cor-borda);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+h2 {
+    font-weight: normal;
+    margin-top: 0;
+    color: var(--cor-texto-principal);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+/* --- Campos de Formulário (Página do Cliente) --- */
+.input-field {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    background-color: var(--cor-fundo-input);
+    font-size: 1rem;
+    color: var(--cor-texto-principal);
+    box-sizing: border-box;
+    font-family: 'Garamond', serif;
+}
+select:required:invalid { color: var(--cor-texto-suave); }
+
+.date-picker-wrapper { position: relative; }
+.date-picker-wrapper label {
+    position: absolute;
+    left: 15px;
+    top: 16px;
+    color: var(--cor-texto-suave);
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background-color: var(--cor-fundo-input);
+    padding: 0 5px;
+}
+.date-picker-wrapper input[type="date"]:focus + label,
+.date-picker-wrapper input[type="date"]:valid + label {
+    top: -8px;
+    font-size: 0.8rem;
+    color: var(--cor-primaria);
+}
+
+/* --- Botões e Outros Elementos (Página do Cliente) --- */
+.btn-primary {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid var(--cor-primaria);
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: var(--cor-primaria);
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--cor-primaria);
+}
+
+.times-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.time-btn {
+    flex-grow: 1;
+    flex-basis: 80px;
+    padding: 12px 5px;
+    border: 1px solid var(--cor-primaria);
+    background-color: transparent;
+    color: var(--cor-primaria);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+.time-btn:hover:not(:disabled) { background-color: var(--cor-primaria); color: var(--cor-fundo-cartao); }
+.time-btn.selected { background-color: var(--cor-primaria); color: #fff; font-weight: 600; }
+.time-btn:disabled {
+    background-color: var(--cor-btn-desabilitado);
+    color: var(--cor-texto-suave);
+    cursor: not-allowed;
+    text-decoration: line-through;
+    border-color: transparent;
+}
+
+.loading-spinner {
+    width: 25px;
+    height: 25px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--cor-primaria);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+footer {
+    text-align: center;
+    padding: 40px 20px 20px;
+    color: var(--cor-texto-suave);
+    font-size: 0.9rem;
+    background: transparent;
+}
+.social-icons { text-align: center; margin-bottom: 15px; }
+.social-icons a {
+    color: var(--cor-texto-suave);
+    font-size: 2rem;
+    margin: 0 15px;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.social-icons a:hover {
+    color: var(--cor-primaria);
+    transform: scale(1.1);
+}
+
+.hidden { display: none !important; }
+
+
+/* ===============================================
+   CORREÇÃO FINAL PARA INPUTS NO SAFARI (IPHONE)
+   =============================================== */
+
+/* Garante que todos os inputs tenham o mesmo tamanho de caixa */
+.input-field {
+    box-sizing: border-box;
+}
+
+/* Estilo específico para o placeholder do seletor de data */
+.date-picker-wrapper label {
+    /* Move o texto "Escolha uma data" um pouco para cima para alinhar melhor */
+    top: 14px; 
+}

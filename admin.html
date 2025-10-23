@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- TELA DE CARREGAMENTO: VISÍVEL POR PADRÃO -->
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- TELA DE LOGIN: COMEÇA ESCONDIDA -->
+    <main id="login-section" class="container hidden">
+        <header>
+            <img src="logo.jpg" alt="Logo da Barbearia" class="logo">
+        </header>
+        <section>
+            <h2>Acesso Restrito</h2>
+            <form id="login-form">
+                <input type="email" id="admin-email" placeholder="Email" class="input-field" required>
+                <input type="password" id="admin-password" placeholder="Senha" class="input-field" required>
+                <button type="submit" class="btn-primary">Entrar</button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+        </section>
+    </main>
+
+    <!-- PAINEL DE ADMINISTRAÇÃO: TAMBÉM COMEÇA ESCONDIDO -->
+    <div id="admin-dashboard" class="hidden">
+        <nav class="sidebar">
+            <div class="sidebar-header"><img src="logo.jpg" alt="Logo" class="sidebar-logo"></div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-section="dashboard-section"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></li>
+                <li class="menu-item" data-section="agenda-section"><i class="fas fa-calendar-alt"></i><span>Agenda</span></li>
+                <li class="menu-item" data-section="clientes-section"><i class="fas fa-users"></i><span>Clientes</span></li>
+                <li class="menu-item" data-section="servicos-section"><i class="fas fa-cut"></i><span>Serviços</span></li>
+                <li class="menu-item" data-section="financeiro-section"><i class="fas fa-chart-line"></i><span>Financeiro</span></li>
+                <li class="menu-item" data-section="relatorios-section"><i class="fas fa-file-alt"></i><span>Relatórios</span></li> <!-- ✅ ITEM ADICIONADO -->
+                <li class="menu-item" data-section="configuracoes-section"><i class="fas fa-cog"></i><span>Configurações</span></li>
+            </ul>
+            <div class="sidebar-footer"><button id="logout-button"><i class="fas fa-sign-out-alt"></i><span>Sair</span></button></div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Seção 1: Dashboard -->
+            <section id="dashboard-section" class="dashboard-section active-section">
+                <header class="main-header"><h1>Dashboard</h1><p>Bem-vindo! Aqui está um resumo do seu dia.</p></header>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fas fa-calendar-check"></i><div class="stat-info"><span class="stat-value" id="stat-agendamentos-hoje">0</span><span class="stat-label">Agendamentos Hoje</span></div></div>
+                    <div class="stat-card"><i class="fas fa-dollar-sign"></i><div class="stat-info"><span class="stat-value" id="stat-faturamento-dia">R$ 0,00</span><span class="stat-label">Faturamento do Dia</span></div></div>
+                </div>
+                <div class="content-box"><h2>Próximos Agendamentos</h2><div id="proximos-agendamentos-list"><p>Nenhum agendamento futuro.</p></div></div>
+                <div class="content-box"><h2>Lembretes de Hoje</h2><div id="lembretes-list"><p>Nenhum agendamento hoje precisa de lembrete no momento.</p></div></div>
+            </section>
+
+            <!-- Seção 2: Agenda -->
+            <section id="agenda-section" class="dashboard-section">
+                 <header class="main-header"><h1>Agenda</h1><div class="agenda-controls"><input type="date" id="agenda-date-picker" class="input-field"><button id="add-appointment-btn" class="btn-primary"><i class="fas fa-plus"></i> Novo</button></div></header>
+                <div id="agenda-grid-container"></div>
+            </section>
+
+            <!-- Seção 3: Clientes -->
+            <section id="clientes-section" class="dashboard-section">
+                <header class="main-header"><h1>Clientes</h1><div class="clientes-controls"><input type="text" id="client-search-input" class="input-field" placeholder="Buscar cliente por nome..."><button id="add-new-client-btn" class="btn-primary"><i class="fas fa-user-plus"></i> Novo Cliente</button></div></header>
+                <div id="client-manager-list"></div>
+            </section>
+
+            <!-- Seção 4: Serviços -->
+            <section id="servicos-section" class="dashboard-section">
+                <header class="main-header">
+                    <h1>Gerenciar Serviços</h1>
+                    <div class="clientes-controls">
+                        <button id="add-new-service-btn" class="btn-primary"><i class="fas fa-plus"></i> Novo Serviço</button>
+                    </div>
+                </header>
+                <div id="service-manager-list" class="content-box">
+                    <div class="loading-spinner"></div>
+                </div>
+            </section>
+
+            <!-- Seção 5: Financeiro -->
+            <section id="financeiro-section" class="dashboard-section">
+                <header class="main-header"><h1>Relatório Financeiro</h1></header>
+                <div class="report-box">
+                    <h2>Faturamento por Período</h2>
+                    <div class="date-range-picker">
+                        <div><label for="start-date">Data de Início</label><input type="date" id="start-date" class="input-field"></div>
+                        <div><label for="end-date">Data de Fim</label><input type="date" id="end-date" class="input-field"></div>
+                    </div>
+                    <button id="calculate-revenue-btn" class="btn-primary">Gerar Relatório</button>
+                    <div id="revenue-result" class="revenue-display hidden"></div>
+                </div>
+                <div class="content-box"><h2>Desempenho Mensal</h2><canvas id="revenue-chart"></canvas></div>
+            </section>
+            
+            <!-- ✅✅✅ NOVA SEÇÃO DE RELATÓRIOS ✅✅✅ -->
+            <section id="relatorios-section" class="dashboard-section">
+                <header class="main-header">
+                    <h1>Relatório de Agendamentos</h1>
+                    <p>Selecione um período para gerar um relatório detalhado e exportar os dados.</p>
+                </header>
+
+                <div class="content-box">
+                    <h2>Gerar Relatório por Período</h2>
+                    <div class="date-range-picker" style="margin-bottom: 20px;">
+                        <div>
+                            <label for="report-start-date">Data de Início</label>
+                            <input type="date" id="report-start-date" class="input-field">
+                        </div>
+                        <div>
+                            <label for="report-end-date">Data de Fim</label>
+                            <input type="date" id="report-end-date" class="input-field">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <button id="generate-report-btn" class="btn-primary" style="width: auto; flex-grow: 1;">
+                            <i class="fas fa-search"></i> Gerar
+                        </button>
+                        <button id="download-csv-btn" class="btn-secondary hidden" style="width: auto;">
+                            <i class="fas fa-download"></i> Baixar CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div id="report-results-container" class="content-box hidden" style="margin-top: 30px;">
+                    <h2>Resultados</h2>
+                    <div id="report-table-wrapper" style="overflow-x: auto;">
+                        <!-- A tabela será inserida aqui pelo JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção 6: Configurações -->
+            <section id="configuracoes-section" class="dashboard-section">
+                <header class="main-header"><h1>Configurações</h1><p>Gerencie as regras e horários da sua barbearia.</p></header>
+                <form id="settings-form">
+                    <div class="content-box">
+                        <h2><i class="fas fa-clock"></i> Horários de Funcionamento</h2>
+                        <div id="horarios-config-container" class="settings-grid"></div>
+                    </div>
+                    <div class="content-box">
+                        <h2><i class="fas fa-cogs"></i> Regras de Agendamento</h2>
+                        <div class="settings-grid">
+                            <div class="input-group">
+                                <label for="antecedencia-minutos">Antecedência Mínima para Agendar (em minutos)</label>
+                                <input type="number" id="antecedencia-minutos" class="input-field" placeholder="Ex: 60">
+                            </div>
+                            <div class="input-group">
+                                <label for="whatsapp-notifications">Número de WhatsApp para Notificações</label>
+                                <input type="tel" id="whatsapp-notifications" class="input-field" placeholder="Ex: 5511999998888">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        <h2><i class="fas fa-calendar-times"></i> Bloqueio de Dias</h2>
+                        <div class="input-group">
+                            <label for="block-date-picker">Selecione uma data para bloquear ou desbloquear</label>
+                            <input type="date" id="block-date-picker" class="input-field">
+                        </div>
+                        <div id="blocked-dates-list" class="blocked-dates-container"></div>
+                    </div>
+                    <div class="settings-footer">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Salvar Alterações</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modais (não precisam de alteração) -->
+    <div id="modal-backdrop" class="hidden">
+        <div id="modal-content">
+            <div class="modal-header"><h3>Novo Agendamento</h3></div>
+            <form id="manual-booking-form">
+                <div class="modal-body">
+                    <input type="text" id="manual-client-name" placeholder="Nome do Cliente" class="input-field" required>
+                    <input type="tel" id="manual-client-phone" placeholder="Telefone com DDD" class="input-field" required>
+                    <select id="manual-service-picker" class="input-field" required><option value="" disabled selected>Selecione um serviço</option></select>
+                    <select id="manual-time-picker" class="input-field" required><option value="" disabled selected>Selecione um horário</option></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="cancel-modal-btn" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="client-profile-modal-backdrop" class="hidden">
+        <div id="client-profile-modal-content">
+            <div class="modal-header"><h3>Perfil do Cliente</h3></div>
+            <form id="client-profile-form">
+                <div class="modal-body" id="client-profile-details"></div>
+                <div class="modal-footer">
+                    <button type="button" id="delete-client-btn" class="btn-danger hidden">Excluir</button>
+                    <div class="modal-footer-actions">
+                        <button type="button" id="close-client-modal-btn" class="btn-secondary">Fechar</button>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="service-modal-backdrop" class="hidden">
+        <div id="service-modal-content" class="modal-content">
+            <div class="modal-header">
+                <h3 id="service-modal-title">Novo Serviço</h3>
+            </div>
+            <form id="service-form">
+                <div class="modal-body">
+                    <input type="hidden" id="service-id">
+                    <div class="input-group">
+                        <label for="service-name">Nome do Serviço</label>
+                        <input type="text" id="service-name" class="input-field" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="service-price">Preço (Ex: 35,00)</label>
+                        <input type="text" id="service-price" class="input-field" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="service-duration">Duração (em minutos)</label>
+                        <input type="number" id="service-duration" class="input-field" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="delete-service-btn" class="btn-danger hidden">Excluir</button>
+                    <div class="modal-footer-actions">
+                        <button type="button" id="cancel-service-modal-btn" class="btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="admin.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('Service Worker registrado com sucesso:', registration);
+                }).catch(error => {
+                    console.log('Falha ao registrar o Service Worker:', error);
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>

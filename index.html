@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d1117"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img id="logo-barbearia" src="logo.jpg" alt="Logo da Barbearia" class="logo">
+            <h1 id="nome-barbearia"></h1>
+        </div>
+    </header>
+    <main class="container">
+        <section id="scheduler">
+            <h2>1. Escolha o Serviço e a Data</h2>
+            <select id="service-picker" class="input-field" required>
+                <option value="" disabled selected>Selecione um serviço</option>
+            </select>
+            <div class="date-picker-wrapper">
+                <label for="date-picker">Escolha uma data</label>
+                <!-- ✅✅✅ CORREÇÃO APLICADA AQUI ✅✅✅ -->
+                <input type="date" id="date-picker" class="input-field" required>
+            </div>
+        </section>
+        <section id="time-slots" class="hidden">
+            <h2>2. Escolha o Horário</h2>
+            <div id="times-container" class="times-grid"></div>
+        </section>
+        <section id="booking-form" class="hidden">
+            <h2>3. Confirme seus Dados</h2>
+            <form id="form">
+                <input type="text" id="client-name" placeholder="Seu Nome" class="input-field" required>
+                <input type="tel" id="client-phone" placeholder="Telefone com DDD (para lembretes)" class="input-field" required>
+                <button type="submit" class="btn-primary">Confirmar Agendamento</button>
+                <div id="loading-spinner" class="loading-spinner hidden"></div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="social-icons">
+            <a href="https://instagram.com/SEU_USUARIO_INSTAGRAM" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://facebook.com/SUA_PAGINA_FACEBOOK" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="https://api.whatsapp.com/send?phone=5519995027183" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="admin.html" aria-label="Painel do Administrador" id="admin-login-icon"><i class="fas fa-sign-in-alt"></i></a>
+        </div>
+        <p>&copy; 2025 <span id="footer-barber-name"></span>. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- ORDEM CORRETA E FINAL DOS SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="config.js"></script> <!-- PRIMEIRO -->
+    <script src="app.js"></script>     <!-- DEPOIS -->
+</body>
+</html>
