@@ -1,5 +1,5 @@
 /* =================================================
-   ARQUIVO DE ESTILO (CSS) ORIGINAL - VERSÃO ESTÁVEL E CORRIGIDA
+   ARQUIVO DE ESTILO (CSS) - VERSÃO FINAL CORRIGIDA
    ================================================= */
 
 /* --- Variáveis de Cor (Tema Barbearia Clássica) --- */
@@ -195,23 +195,25 @@ footer {
 
 
 /* =============================================================
-   CORREÇÃO FINAL E COMPLETA PARA INPUTS NO SAFARI (IPHONE)
-   - Força a Largura, Altura e Alinhamento corretos
+   CORREÇÃO FINAL (V2) - FORÇA TOTAL CONTRA O SAFARI
    ============================================================= */
 
-/* 1. CORRIGE O PROBLEMA DA LARGURA ("FICAVA PEQUENO") */
+/* Garante que todos os campos de formulário ocupem 100% da largura */
 .input-field {
     width: 100%;
     box-sizing: border-box;
 }
 
-/* 2. CORRIGE O PROBLEMA DA ALTURA ("FICAVA DESPROPORCIONAL") */
+/* Força o campo de data a se comportar como um campo de texto normal,
+   ignorando a aparência padrão do Safari, e aplica a altura correta. */
 #date-picker.input-field {
-    height: 52px; /* <-- Força a altura a ser igual ao campo de serviços */
+    -webkit-appearance: none;  /* Remove o estilo padrão do Safari */
+    appearance: none;          /* Padrão moderno para outros navegadores */
+    height: 52px;              /* Força a altura a ser igual ao campo de serviços */
     line-height: normal;
 }
 
-/* 3. AJUSTE FINO DO TEXTO */
+/* Ajuste fino do texto "Escolha uma data" */
 .date-picker-wrapper label {
     top: 15px; 
 }
